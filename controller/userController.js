@@ -68,7 +68,7 @@ const updateUser = async (req, res) => {
       user.photo = `/uploads/${req.file.filename}`;
     }
 
-    const users = await User.findByIdAndUpdate(req.params.id, updates, { new: true });
+    const users = await User.findByIdAndUpdate(req.params.id, user, { new: true });
 
     if (!users) {
       return res.status(404).send();
@@ -85,9 +85,9 @@ const deleteUser = async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
     if (!user) {
-      return res.status(404).send();
+      return res.status(404).send({ error: 'User not found' });
     }
-    res.send(user);
+    res.send({ message: 'User deleted successfully' });
   } catch (error) {
     res.status(500).send();
   }
